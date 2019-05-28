@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Humidity</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="reset.css"> -->
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid" id="container-id">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header" id="navbar-banner">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" id="home" href="index.html">Latitude</a>
+          </div>
+      
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plots<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="plot1.html">Max Temperature</a></li>
+                  <li><a href="plot2.html">Humidity</a></li>
+                  <li><a href="plot3.html">Cloudiness</a></li>
+                  <li><a href="plot4.html">Wind Speed</a></li>
+                </ul>
+              </li>
+              <li><a href="comparisons.html">Comparison</a></li>
+              <li><a href="data.html">Data</a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+    
+          <div class="navbar-toggle navbar-nav pull-left">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plots<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="plot1.html">Max Temperature</a></li>
+                <li><a href="plot2.html">Humidity</a></li>
+                <li><a href="plot3.html">Cloudiness</a></li>
+                <li><a href="plot4.html">Wind Speed</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="comparisons.html">Comparison</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="data.html">Data</a></li>
+              </ul>
+          </div>
+      
+        </div><!-- /.container-fluid -->
+      </nav>
+    
+
+
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-8">
+            <div class=""">
+              <h1>Humidity</h1>
+              <img src="Resources/assets/images/HumidityByLatitude.png" width="100%">
+              
+              <p>
+              There is no strong relationship between latitude and humidity.
+              However, there are a few cities in the northern hemisphere with 0% humidity,
+              possibly due to a lack of data.  One city has ridiculously high humidity
+              (nearly 300%), probably due to a data entry error.
+              </p>
+          </div>
+          </div>
+          <div class="col-sm-4">
+            <div class=""><h2>Visualizations</h2>
+              <div class="row">
+                  <div class="col-xs-3 col-sm-6">
+                    <div class = "unselected-visualization">
+                    <a href="plot1.html" class="thumbnail">
+                      <img src="Resources/assets/images/MaxTemperatureByLatitude.png" alt="Temperature">
+                    </a>
+                    </div>
+                  </div>
+                  <div class="col-xs-3 col-sm-6">
+                    <div class = "selected-visualization">
+                        <a href="plot2.html" class="thumbnail">
+                        <img src="Resources/assets/images/HumidityByLatitude.png" alt="Humidity">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xs-3 col-sm-6">
+                      <div class = "unselected-visualization">
+                      <a href="plot3.html" class="thumbnail">
+                      <img src="Resources/assets/images/CloudinessByLatitude.png" alt="Cloudiness">
+                      </a>
+                      </div>
+                  </div>
+                  <div class="col-xs-3 col-sm-6">
+                      <div class = "unselected-visualization">
+                        <a href="plot4.html" class="thumbnail">
+                        <img src="Resources/assets/images/WindSpeedByLatitude.png" alt="Wind Speed">
+                        </a>
+                      </div>
+                  </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+</body>
+
+</html>
