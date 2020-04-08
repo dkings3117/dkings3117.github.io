@@ -83,7 +83,7 @@ function buildPlot(fulldata) {
       buttons: [{
       method: 'restyle',
       args: ['visible', [true, false]],
-      label: 'Confirmed caes by day'
+      label: 'Confirmed cases by day'
     }]
     }]
 
