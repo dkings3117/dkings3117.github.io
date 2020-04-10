@@ -1,5 +1,9 @@
 // Function to determine marker size based on magnitude
 function markerSize(mag) {
+  if (mag == 0)
+  {
+    mag = 1;
+  }
   return Math.sqrt(mag * 100000);
 }
 

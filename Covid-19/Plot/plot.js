@@ -20,6 +20,8 @@ function buildPlot(fulldata) {
     // });
     dayArray = [];
     caseArray = [];
+    diffArray = [];
+    pctArray = [];
     for (i =0; i < fulldata.length; i++) {
       if (i == 225)
       {
@@ -36,6 +38,16 @@ function buildPlot(fulldata) {
         {
           dayArray.push(fulldata.columns[j]);
           caseArray.push(fulldata[i][fulldata.columns[j]]);
+          if (j == 4)
+          {
+            diffArray.push(fulldata[i][fulldata.columns[j]]);
+            pctArray.push(0);
+          }
+          else
+          {
+            diffArray.push(fulldata[i][fulldata.columns[j]] - fulldata[i][fulldata.columns[j-1]]);
+            pctArray.push(100 * (fulldata[i][fulldata.columns[j]] / fulldata[i][fulldata.columns[j-1]] - 1) );
+          }
         }
       }
       // var activedate = fulldata[i].date;
@@ -53,6 +65,11 @@ function buildPlot(fulldata) {
     console.log(dayArray);
     console.log("caseArray:");
     console.log(caseArray);
+    console.log("diffArray:");
+    console.log(diffArray);
+    console.log("pctArray");
+    console.log(pctArray);
+  
     // Create empty arrays to hold total sightings for each month/day of the week
     var monthtotals = {};
     var daytotals = {};
@@ -64,8 +81,8 @@ function buildPlot(fulldata) {
     // Set x and y arrays
     //var barx = [["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], dayArray];
     //var bary = [[monthtotals.Jan, monthtotals.Feb, monthtotals.Mar, monthtotals.Apr, monthtotals.May, monthtotals.Jun, monthtotals.Jul, monthtotals.Aug, monthtotals.Sep, monthtotals.Oct, monthtotals.Nov, monthtotals.Dec], caseArray];
-    var barx = [dayArray];
-    var bary = [caseArray];
+    var barx = [dayArray, dayArray, dayArray];
+    var bary = [caseArray, diffArray, pctArray];
 
 
     function makeTrace(i) {
@@ -82,12 +99,22 @@ function buildPlot(fulldata) {
       yanchor: 'top',
       buttons: [{
       method: 'restyle',
-      args: ['visible', [true, false]],
+      args: ['visible', [true, false, false]],
       label: 'Confirmed cases by day'
-    }]
+      }, {
+        method: 'restyle',
+        args: ['visible', [false, true, false]],
+        label: 'New cases by day'
+      }, {
+        method: 'restyle',
+        args: ['visible', [false, false, true]],
+        label: 'Percent change by day'
+      }]
+
+
     }]
 
-    var data = [0, 1].map(makeTrace)
+    var data = [0, 1, 2].map(makeTrace)
 
 
     var layout = {
