@@ -1,6 +1,3 @@
-// Define data variable
-// var fulldata;
-
 // Retrieve CSV data
 d3.csv("https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv").then(function(fulldata) {
   buildPlot(fulldata)
@@ -15,9 +12,6 @@ var mydayarray = [];
 function buildPlot(fulldata) {
     console.log(fulldata);
     console.log(fulldata.columns);
-    // fulldata.forEach(function(row) {
-    //   console.log(Object.keys(row))
-    // });
     dayArray = [];
     caseArray = [];
     diffArray = [];
@@ -28,12 +22,6 @@ function buildPlot(fulldata) {
         console.log(fulldata[i]);
         console.log("columns:");
         console.log(Object.keys(fulldata[i]));
-        // for (j = 0; j < fulldata.columns.length; j++)
-        // {
-        //   console.log("j = " + j);
-        //   console.log(fulldata.columns[j]);
-        //   console.log(fulldata[i][fulldata.columns[j]]);
-        // }
         for (j = 4; j < fulldata.columns.length; j++)
         {
           dayArray.push(fulldata.columns[j]);
@@ -50,16 +38,6 @@ function buildPlot(fulldata) {
           }
         }
       }
-      // var activedate = fulldata[i].date;
-      // initialdates.push(activedate);
-      // var parts = initialdates[i].split('-');
-      // var mydate = new Date(parts[0], parts[1] - 1, parts[2]); 
-      // var mydatestring = mydate.toDateString();
-      // var mydatearray = mydatestring.split(' ');
-      // var mymonth = mydatearray[1];
-      // mymontharray.push(mymonth);
-      // var myday = mydatearray[0];
-      // mydayarray.push(myday);
     }
     console.log("dayArray:");
     console.log(dayArray);
@@ -70,20 +48,9 @@ function buildPlot(fulldata) {
     console.log("pctArray");
     console.log(pctArray);
   
-    // Create empty arrays to hold total sightings for each month/day of the week
-    var monthtotals = {};
-    var daytotals = {};
-
-    // Populate arrays with total sightings for each month/day of the week
-    caseArray.forEach(function(x) { monthtotals[x] = (monthtotals[x] || 0)+1; });
-    mydayarray.forEach(function(x) { daytotals[x] = (daytotals[x] || 0)+1; });
-
     // Set x and y arrays
-    //var barx = [["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], dayArray];
-    //var bary = [[monthtotals.Jan, monthtotals.Feb, monthtotals.Mar, monthtotals.Apr, monthtotals.May, monthtotals.Jun, monthtotals.Jul, monthtotals.Aug, monthtotals.Sep, monthtotals.Oct, monthtotals.Nov, monthtotals.Dec], caseArray];
     var barx = [dayArray, dayArray, dayArray];
     var bary = [caseArray, diffArray, pctArray];
-
 
     function makeTrace(i) {
       return {
@@ -100,7 +67,7 @@ function buildPlot(fulldata) {
       buttons: [{
       method: 'restyle',
       args: ['visible', [true, false, false]],
-      label: 'Confirmed cases by day'
+      label: 'Total confirmed cases by day'
       }, {
         method: 'restyle',
         args: ['visible', [false, true, false]],
@@ -111,16 +78,14 @@ function buildPlot(fulldata) {
         label: 'Percent change by day'
       }]
 
-
     }]
 
     var data = [0, 1, 2].map(makeTrace)
 
-
     var layout = {
       updatemenus: updatemenus,
       title: "Confirmed cases by day",
-      yaxis: { title: "Number of confirmed cases" }
+      yaxis: { title: "Confirmed cases" }
     } 
 
     Plotly.plot('lineplot', data, layout);

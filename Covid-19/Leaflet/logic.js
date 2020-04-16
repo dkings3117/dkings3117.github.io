@@ -73,7 +73,6 @@ function createMap(covid19Data) {
   var total_recovered = 0;
 
   for (var i = 0; i < covid19Data.length; i++) {
-    // console.log(i);
     if (covid19Data[i].geometry)
     {
       var latitude = covid19Data[i].geometry.coordinates[1];
@@ -110,7 +109,6 @@ function createMap(covid19Data) {
 
   // Create an overlay object
   var overlayMaps = {
-    // "Heat Map": cases,
     "Markers": cases
   };
   

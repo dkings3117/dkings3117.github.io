@@ -39,7 +39,10 @@
                     <a class="nav-link" href="Leaflet/index.html">Confirmed Cases Map</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Plot/index.html">Line Graph</a>
+                  <a class="nav-link" href="Plot/index.html">USA Line Graph</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="StatePlot/index.html">State Line Graph</a>
                 </li>
         </ul>
     </nav>
@@ -50,7 +53,7 @@
   <!-- Creates the Overall Grid -->
   <div class="container">
     
-        <div class="col-md-9"> 
+        <div class="col-md-12"> 
          
                     <div class="bs-component">
                         <p><b>Click on the map for an interactive, up to date map.</b>
@@ -64,7 +67,7 @@
                             cases per capita.
                         </p>
                         
-                        <a href="Leaflet/index.html" target="_blank" data-toggle="tooltip" data-placement="top" title="Click for a full interactive map!">
+                        <a href="Leaflet/index.html" data-toggle="tooltip" data-placement="top" title="Click for a full interactive map!">
                           <img src="covid19map.png" width="750">
                         </a>
 
@@ -72,16 +75,27 @@
                       <p><b>Click on the line graph for an up to date graph.</b></p>
                       <p>
                           This line graph shows the number of confirmed cases in the United States
-                          by date.  For future changes, I will fit the curve to a Gaussian function
+                          by date.  There are drop down options to display total cumulative confirmed cases,
+                          the number of new cases per day, and the percent increase in cumulative cases per day.
+                          For future changes, I will fit the curve to a Gaussian function
                           to show when and how high the peak is expected to get and also when
-                          the threat subsides.  I would also like to add line graphs by state or
-                          country.  Another option is to display data per capita for each state
-                          and country.
+                          the threat subsides.  I would also like to add line graphs for each
+                          country.  Another option is to display data per capita.
                       </p>
-                     <a href="Plot/index.html" target="_blank">
+                     <a href="Plot/index.html">
                       <img src="covid19line.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
                     </a> 
-                          
+
+                    <hr>
+                      <p><b>Click on the line graph for an up to date graph.</b></p>
+                      <p>
+                          This line graph shows the number of confirmed cases for each state in the United States
+                          by date.
+                      </p>
+                     <a href="StatePlot/index.html">
+                      <img src="covid19state.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
+                    </a> 
+
                     </div>
         </div> 
 
