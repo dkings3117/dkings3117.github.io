@@ -42,9 +42,12 @@
                   <a class="nav-link" href="Plot/index.html">USA Line Graph</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="StatePlot/index.html">State Line Graph</a>
+                  <a class="nav-link" href="StatePlot/index.html">State Line Graph - Total</a>
                 </li>
-        </ul>
+                <li class="nav-item">
+                  <a class="nav-link" href="StatePlotDiff/index.html">State Line Graph - New</a>
+                </li>
+          </ul>
     </nav>
 <!-- end navbar -->
 
@@ -56,6 +59,9 @@
         <div class="col-md-12"> 
          
                     <div class="bs-component">
+                        <h1>
+                          Map of confirmed cases per county
+                        </h1>
                         <p><b>Click on the map for an interactive, up to date map.</b>
                         </p>
                         <p>
@@ -66,34 +72,69 @@
                             For future changes, I would like to have the marker circles represent
                             cases per capita.
                         </p>
+                        <p>
+                          Data source: 
+                          <a href="https://opendata.arcgis.com/datasets/628578697fb24d8ea4c32fa0c5ae1843_0.geojson">
+                            https://opendata.arcgis.com/datasets/628578697fb24d8ea4c32fa0c5ae1843_0.geojson
+                          </a>
+                        </p>
                         
                         <a href="Leaflet/index.html" data-toggle="tooltip" data-placement="top" title="Click for a full interactive map!">
                           <img src="covid19map.png" width="750">
                         </a>
 
                     <hr>
+                      <h1>
+                        Line graph of confirmed cases in the United States
+                      </h1>
                       <p><b>Click on the line graph for an up to date graph.</b></p>
                       <p>
                           This line graph shows the number of confirmed cases in the United States
                           by date.  There are drop down options to display total cumulative confirmed cases,
                           the number of new cases per day, and the percent increase in cumulative cases per day.
-                          For future changes, I will fit the curve to a Gaussian function
-                          to show when and how high the peak is expected to get and also when
-                          the threat subsides.  I would also like to add line graphs for each
+                          For future changes, I would like to add line graphs for each
                           country.  Another option is to display data per capita.
                       </p>
-                     <a href="Plot/index.html">
-                      <img src="covid19line.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
-                    </a> 
+                      <p>
+                        Data source: 
+                        <a href="https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv">
+                          https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv
+                        </a>
+                      </p>
+                      <a href="Plot/index.html">
+                        <img src="covid19line.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
+                      </a>
 
                     <hr>
+                      <h1>
+                        Line graph of confirmed cases by state
+                      </h1>
                       <p><b>Click on the line graph for an up to date graph.</b></p>
                       <p>
                           This line graph shows the number of confirmed cases for each state in the United States
                           by date.
                       </p>
-                     <a href="StatePlot/index.html">
-                      <img src="covid19state.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
+                      <p>
+                        Data source:
+                        <a href="https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv">
+                          https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv
+                        </a>
+                      </p>
+                      <a href="StatePlot/index.html">
+                        <img src="covid19state.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
+                      </a> 
+
+                    <hr>
+                      <h1>
+                        Line graph of change in confirmed cases by state
+                      </h1>
+                      <p><b>Click on the line graph for an up to date graph.</b></p>
+                      <p>
+                          This line graph shows the change in the number of confirmed cases for each state in the United States
+                          by date.
+                      </p>
+                     <a href="StatePlotDiff/index.html">
+                      <img src="covid19statediff.png" width="750" height="400" data-toggle="tooltip" data-placement="top" title="Click to see a full interactive trend graph!">
                     </a> 
 
                     </div>
