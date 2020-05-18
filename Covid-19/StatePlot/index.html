@@ -1,53 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Covid-19 Confirmed Cases by Day</title>
+  <meta charset="utf-8">
+  <title>Covid=19 Data by State</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css"> -->
   <!-- Bring in our bootstrap stylesheet -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-w6tc0TXjTUnYHwVwGgnYyV12wbRoJQo9iMlC2KdkdmVvntGgzT9jvqNEF/uKaF4m" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for(filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/_variables.scss') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/_bootswatch.scss') }}">
-  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-w6tc0TXjTUnYHwVwGgnYyV12wbRoJQo9iMlC2KdkdmVvntGgzT9jvqNEF/uKaF4m" crossorigin="anonymous">
+
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
   <!-- Plotly script source -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  
   <!--D3 cdn-->
   <script src="https://d3js.org/d3.v5.min.js"></script>
-
-
+  <!-- Import javascript -->
+  <!-- <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> -->
 </head>
+
 <body>
 <!--Begin Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="../index.html">Covid-19 Data</a>
-    <div class="collapse navbar-collapse" id="navbarColor02">
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active"> -->
-        
-        <li class="nav-item">
-          <a class="nav-link" href="../Leaflet/index.html">Confirmed Cases Map</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../Plot/index.html">USA Line Graph</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">State Line Graph - Total</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../StatePlotDiff/index.html">State Line Graph - New</a>
-        </li>
-      </ul>
-    </div>   
+  <a class="navbar-brand" href="../index.html">Covid-19 Data</a>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item active"> -->
       
-  </nav>
-<!--End Navbar-->
+      <li class="nav-item">
+        <a class="nav-link" href="../Leaflet/index.html">Confirmed Cases Map</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../Plot/index.html">USA Line Graph</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">State Line Graphs</a>
+      </li>
+    </ul>
+  </div>   
     
-  <div id="lineplot"></div>
-  <script src="plot.js"></script>
-  
+</nav>
+<!--End Navbar-->
+  <h1 style="text-align:center">Covid-19 Cases by State</h1>
+    <div class="container">
+      <div class="row margin-top-50">
+      <select id="stateSelector">
+      </select>
+      <div class="col-md-12">
+          <div id="lineplot"></div>
+          <div id="table-area" class="">
+            <table id="state-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="table-head" style="text-align:left">ID</th>
+                  <th class="table-head" style="text-align:left">State</th>
+                  <th class="table-head" style="text-align:right">Confirmed</th>
+                  <th class="table-head" style="text-align:right">Deaths</th>
+                  <th class="table-head" style="text-align:right">New Cases</th>
+                  <th class="table-head" style="text-align:right">New Deaths</th>
+                  <th class="table-head" style="text-align:right">7 Day Avg. New Cases</th>
+                  <th class="table-head" style="text-align:right">7 Day Avg. New Deaths</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <footer class="footer">
+      <span class="bottom"></span>
+    </footer> -->
+  </div>
+  <script src="static/js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+
+
 </body>
+
 </html>

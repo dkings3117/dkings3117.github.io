@@ -4,9 +4,6 @@ d3.csv("https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2
 });
 
 // Create empty arrays
-var initialdates = [];
-var mymontharray = [];
-var mydayarray = [];
 
 // Parse desired months/days
 function buildPlot(fulldata) {
@@ -15,8 +12,9 @@ function buildPlot(fulldata) {
     dayArray = [];
     caseArray = [];
     diffArray = [];
+    roll7DiffArray = [];
     pctArray = [];
-    for (i =0; i < fulldata.length; i++) {
+    for (i = 0; i < fulldata.length; i++) {
       if (i == 225)
       {
         console.log(fulldata[i]);
@@ -39,18 +37,31 @@ function buildPlot(fulldata) {
         }
       }
     }
+    rollingTotalDiff7 = 0;
+    for (i = 0; i < caseArray.length; i++)
+    {
+        if (i >= 7)
+        {
+          rollingTotalDiff7 -= diffArray[i-7];
+        }
+        rollingTotalDiff7 += parseInt(diffArray[i]);
+        roll7DiffArray.push(rollingTotalDiff7 / 7.0);
+        console.log("roll7DiffArray = " + roll7DiffArray);
+    }
     console.log("dayArray:");
     console.log(dayArray);
     console.log("caseArray:");
     console.log(caseArray);
     console.log("diffArray:");
     console.log(diffArray);
+    console.log("roll7DiffArray");
+    console.log(roll7DiffArray);
     console.log("pctArray");
     console.log(pctArray);
   
     // Set x and y arrays
-    var barx = [dayArray, dayArray, dayArray];
-    var bary = [caseArray, diffArray, pctArray];
+    var barx = [dayArray, dayArray, dayArray, dayArray];
+    var bary = [caseArray, diffArray, roll7DiffArray, pctArray];
 
     function makeTrace(i) {
       return {
@@ -66,21 +77,25 @@ function buildPlot(fulldata) {
       yanchor: 'top',
       buttons: [{
       method: 'restyle',
-      args: ['visible', [true, false, false]],
+      args: ['visible', [true, false, false, false]],
       label: 'Total confirmed cases by day'
       }, {
         method: 'restyle',
-        args: ['visible', [false, true, false]],
+        args: ['visible', [false, true, false, false]],
         label: 'New cases by day'
       }, {
         method: 'restyle',
-        args: ['visible', [false, false, true]],
+        args: ['visible', [false, false, true, false]],
+        label: 'Rolling 7 day avg. new cases'
+      }, {
+        method: 'restyle',
+        args: ['visible', [false, false, false, true]],
         label: 'Percent change by day'
       }]
 
     }]
 
-    var data = [0, 1, 2].map(makeTrace)
+    var data = [0, 1, 2, 3].map(makeTrace)
 
     var layout = {
       updatemenus: updatemenus,
