@@ -18,17 +18,17 @@ function refresh(refreshData) {
 
     console.log(refreshData);
     console.log(refreshData.columns);
-    max_index = 78;
-    var dayArray = new Array(max_index + 1);
-    var caseArray = new Array(max_index + 1);
-    var deathArray = new Array(max_index + 1);
-    var diffArray = new Array(max_index + 1);
-    var deathDiffArray = new Array(max_index + 1);
-    var pctArray = new Array(max_index + 1);
-    var roll7Array = new Array(max_index + 1);
-    var roll7DeathArray = new Array(max_index + 1);
-    var roll7DiffArray = new Array(max_index + 1);
-    var roll7DeathDiffArray = new Array(max_index + 1);
+    data_length = refreshData.length;
+    var dayArray = new Array(data_length);
+    var caseArray = new Array(data_length);
+    var deathArray = new Array(data_length);
+    var diffArray = new Array(data_length);
+    var deathDiffArray = new Array(data_length);
+    var pctArray = new Array(data_length);
+    var roll7Array = new Array(data_length);
+    var roll7DeathArray = new Array(data_length);
+    var roll7DiffArray = new Array(data_length);
+    var roll7DeathDiffArray = new Array(data_length);
     for (var i = 0; i < dayArray.length; i++) {
       dayArray[i] = new Array();
       caseArray[i] = new Array();
@@ -42,7 +42,7 @@ function refresh(refreshData) {
       roll7DeathDiffArray[i] = new Array();
     }
     console.log(dayArray);
-    stateArray = new Array(max_index + 1);
+    stateArray = new Array(data_length);
     fipsArray = [];
     for (i = 0; i < stateArray.length; i++)
     {
@@ -148,7 +148,7 @@ function refresh(refreshData) {
     console.log("caseArray:");
     console.log(caseArray);  
     console.log("table");
-    for (i = 0; i < max_index + 1; i++)
+    for (i = 0; i < data_length; i++)
     {
       console.log("*" + stateArray[i] + "*");
       var stateDropdown = document.getElementById("stateSelector");

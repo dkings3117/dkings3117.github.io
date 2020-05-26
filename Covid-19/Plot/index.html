@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Covid-19 Confirmed Cases by Day</title>
+  <title>Covid-19 Confirmed Cases by Country</title>
   <!-- Bring in our bootstrap stylesheet -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-w6tc0TXjTUnYHwVwGgnYyV12wbRoJQo9iMlC2KdkdmVvntGgzT9jvqNEF/uKaF4m" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-w6tc0TXjTUnYHwVwGgnYyV12wbRoJQo9iMlC2KdkdmVvntGgzT9jvqNEF/uKaF4m" crossorigin="anonymous">
   
+  <link rel="stylesheet" href="static/css/style.css">
   <!-- Plotly script source -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   
@@ -29,19 +30,44 @@
           <a class="nav-link" href="../Leaflet/index.html">Confirmed Cases Map</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">USA Line Graph</a>
+          <a class="nav-link" href="#">Cases by Country</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../StatePlot/index.html">State Line Graphs</a>
+          <a class="nav-link" href="../StatePlot/index.html">Cases by State</a>
         </li>
       </ul>
     </div>   
       
   </nav>
 <!--End Navbar-->
-    
-  <div id="lineplot"></div>
-  <script src="plot.js"></script>
-  
+  <h1 style="text-align:center">Covid-19 Cases by Country</h1>
+  <div class="container">
+    <div class="row margin-top-50">
+      <select id="countrySelector">
+      </select>
+      <div class="col-md-12">
+        <div id="lineplot"></div>
+          <div id="table-area" class="">
+            <table id="country-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="table-head" style="text-align:left">Index</th>
+                  <th class="table-head" style="text-align:left">Country</th>
+                  <th class="table-head" style="text-align:left">State/Province</th>
+                  <th class="table-head" style="text-align:right">Confirmed</th>
+                  <th class="table-head" style="text-align:right">New Cases</th>
+                  <th class="table-head" style="text-align:right">7 Day Avg. New Cases</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="static/js/app.js"></script>
+  <!-- <script src="plot.js"></script> -->
+
 </body>
 </html>
