@@ -271,7 +271,15 @@ function show_state_graph(fips, stateName, dayArray, caseArray, deathArray, diff
       return {
         x: barx[i],
         y: bary[i],
-        type: 'line',
+        type: i==2||i==3?'bar':'line',
+        name: i==2||i==3?'Daily':i==4||i==5?'Rolling 7 day avg':'',
+        marker: {
+          color: i==2||i==3?'rgb(255,151,76)':'rgb(57,106,177)',
+          line: {
+            color: i==2||i==3?'rgb(255,151,76)':'rgb(57,106,177)',
+            width: 1
+          }
+        },
         visible: i === 0,
       };
     }
@@ -291,23 +299,13 @@ function show_state_graph(fips, stateName, dayArray, caseArray, deathArray, diff
       },
       {
         method: 'restyle',
-        args: ['visible', [false, false, true, false, false, false]],
+        args: ['visible', [false, false, true, false, true, false]],
         label: 'New cases by day'
       },
       {
         method: 'restyle',
-        args: ['visible', [false, false, false, true, false, false]],
+        args: ['visible', [false, false, false, true, false, true]],
         label: 'New deaths by day'
-      },
-      {
-        method: 'restyle',
-        args: ['visible', [false, false, false, false, true, false]],
-        label: 'Rolling 7 day avg. new cases'
-      },
-      {
-        method: 'restyle',
-        args: ['visible', [false, false, false, false, false, true]],
-        label: 'Rolling 7 day avg. new deaths'
       }
       ]
     }]

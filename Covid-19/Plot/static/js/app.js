@@ -232,7 +232,15 @@ function show_country_graph(fips, countryName, stateName, dayArray, caseArray, d
       return {
         x: barx[i],
         y: bary[i],
-        type: 'line',
+        type: i==1?'bar':'line',
+        name: i==1?'Daily':i==2?'Rolling 7 day avg':'',
+        marker: {
+          color: i==1?'rgb(255,151,76)':'rgb(57,106,177)',
+          line: {
+            color: i==1?'rgb(255,151,76)':'rgb(57,106,177)',
+            width: 1
+          }
+        },
         visible: i === 0,
       };
     }
@@ -247,13 +255,8 @@ function show_country_graph(fips, countryName, stateName, dayArray, caseArray, d
       },
       {
         method: 'restyle',
-        args: ['visible', [false, true, false]],
+        args: ['visible', [false, true, true]],
         label: 'New cases by day'
-      },
-      {
-        method: 'restyle',
-        args: ['visible', [false, false, true]],
-        label: 'Rolling 7 day avg. new cases'
       }
       ]
     }]
@@ -267,4 +270,5 @@ function show_country_graph(fips, countryName, stateName, dayArray, caseArray, d
     } 
 
     Plotly.newPlot('lineplot', data, layout);
+    //Plotly.addTraces('lineplot', {x: bar[2], y: bar[2]});
 }
