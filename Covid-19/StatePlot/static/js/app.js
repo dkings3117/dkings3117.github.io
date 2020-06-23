@@ -19,18 +19,44 @@ function refresh(refreshData) {
     console.log(refreshData);
     console.log(refreshData.columns);
     data_length = refreshData.length;
-    var dayArray = new Array(data_length);
-    var caseArray = new Array(data_length);
-    var deathArray = new Array(data_length);
-    var diffArray = new Array(data_length);
-    var deathDiffArray = new Array(data_length);
-    var pctArray = new Array(data_length);
-    var roll7Array = new Array(data_length);
-    var roll7DeathArray = new Array(data_length);
-    var roll7DiffArray = new Array(data_length);
-    var roll7DeathDiffArray = new Array(data_length);
-    for (var i = 0; i < dayArray.length; i++) {
+    var dayArray = new Array;
+    var caseArray = new Array;
+    var deathArray = new Array;
+    var diffArray = new Array;
+    var deathDiffArray = new Array;
+    var pctArray = new Array;   /*** DELETE ***/
+    var roll7Array = new Array; /*** DELETE ***/
+    var roll7DeathArray = new Array;  /*** DELETE ***/
+    var roll7DiffArray = new Array;
+    var roll7DeathDiffArray = new Array;
+    var maxFips = 0;
+    var totalIndex = 0;
+    stateArray = [];
+    fipsArray = [];
+    /* for (i = 0; i < stateArray.length; i++)
+    {
+      stateArray[i] = "";
+    } */
+  
+    
+    console.log("dayArray:");
+    console.log(dayArray);
+    dayCounter = -1;
+    lastDate = "";
+
+    for (i = 0; i < refreshData.length; i++)
+    {
+      fips = parseInt(refreshData[i].fips);
+      if (fips > maxFips)
+      {
+        maxFips = fips;
+      }
+    }
+    var arrSize = maxFips + 1;
+    for (var i = 0; i < arrSize; i++)
+    {
       dayArray[i] = new Array();
+      stateArray[i] = "";
       caseArray[i] = new Array();
       deathArray[i] = new Array();
       diffArray[i] = new Array();
@@ -41,36 +67,36 @@ function refresh(refreshData) {
       roll7DiffArray[i] = new Array();
       roll7DeathDiffArray[i] = new Array();
     }
-    console.log(dayArray);
-    stateArray = new Array(data_length);
-    fipsArray = [];
-    for (i = 0; i < stateArray.length; i++)
+
+    for (i = 0; i < refreshData.length; i++)
     {
-      stateArray[i] = "";
+      console.log("i = " + i);
+      console.log("refreshData[i]");
+      console.log(refreshData[i]);
+      console.log("columns:");
+      console.log(Object.keys(refreshData[i]));
+      fips = parseInt(refreshData[i].fips);
+      console.log("fips = " + fips);
+
+      if (refreshData[i].date == lastDate)
+      {
+        caseArray[totalIndex][dayCounter] += parseInt(refreshData[i].cases);
+        deathArray[totalIndex][dayCounter] += parseInt(refreshData[i].deaths);
+      }
+      else
+      {
+        dayCounter++;
+        lastDate = refreshData[i].date;
+        dayArray[totalIndex].push(refreshData[i].date);
+        caseArray[totalIndex].push(parseInt(refreshData[i].cases));
+        deathArray[totalIndex].push(parseInt(refreshData[i].deaths));
+      }
+      dayArray[fips].push(refreshData[i].date);
+      caseArray[fips].push(refreshData[i].cases);
+      deathArray[fips].push(refreshData[i].deaths);
+      stateArray[fips] = refreshData[i].state;
+      pctArray[fips].push(0);
     }
-  
-    console.log(dayArray);
-    counter = 0;
-    
-    console.log("dayArray:");
-    console.log(dayArray);
-
-  for (i =0; i < refreshData.length; i++) {
-
-    console.log("i = " + i);
-    console.log("refreshData[i]");
-    console.log(refreshData[i]);
-    console.log("columns:");
-    console.log(Object.keys(refreshData[i]));
-    fips = parseInt(refreshData[i].fips);
-    console.log("fips = " + fips);
-
-    dayArray[fips].push(refreshData[i].date);
-    caseArray[fips].push(refreshData[i].cases);
-    deathArray[fips].push(refreshData[i].deaths);
-    stateArray[fips] = refreshData[i].state;
-    pctArray[fips].push(0);
-  }
 
     console.log("dayArray:");
     console.log(dayArray);
@@ -82,13 +108,15 @@ function refresh(refreshData) {
     console.log(diffArray);
     console.log("deathDiffArray");
     console.log(deathDiffArray);
-    for (i = 0; i < caseArray.length; i++)
+    for (i = 0; i < arrSize; i++)
     {
       diffArray[i].push(0);
       deathDiffArray[i].push(0);
       for (j = 1; j < caseArray[i].length; j++)
       {
-        diffArray[i].push(caseArray[i][j] - caseArray[i][j-1]);
+        newCases = caseArray[i][j] - caseArray[i][j-1];
+        newDeaths = deathArray[i][j] - deathArray[i][j-1];
+        diffArray[i].push(newCases);
         deathDiffArray[i].push(deathArray[i][j] - deathArray[i][j-1]);
       }
     }
@@ -99,7 +127,7 @@ function refresh(refreshData) {
     console.log("pctArray");
     console.log(pctArray);
 
-    for (i = 0; i < caseArray.length; i++)
+    for (i = 0; i < arrSize; i++)
     {
       console.log("i = " + i);
       rollingTotal7 = 0;
@@ -148,10 +176,16 @@ function refresh(refreshData) {
     console.log("caseArray:");
     console.log(caseArray);  
     console.log("table");
-    for (i = 0; i < data_length; i++)
+    var stateDropdown = document.getElementById("stateSelector");
+    var option = document.createElement("option");
+    option.value = totalIndex;
+    stateArray[totalIndex] = "TOTAL";
+    option.text = stateArray[totalIndex];
+    stateDropdown.add(option);
+
+    for (i = 1; i < arrSize; i++)
     {
       console.log("*" + stateArray[i] + "*");
-      var stateDropdown = document.getElementById("stateSelector");
       if (stateArray[i] != "")
       {
         var option = document.createElement("option");
@@ -196,6 +230,43 @@ function refresh(refreshData) {
         newCell.style.textAlign = "right";
       }
     }
+
+    var tableRef = document.getElementById('state-table').getElementsByTagName('tbody')[0];
+    // Insert a row in the table at row index 0
+    var newRow   = tableRef.insertRow(tableRef.rows.length);
+    // Insert a cell in the row at index 0        
+    var newCell  = newRow.insertCell(0);
+    //newCell.style("visibility:hidden");
+    var newText  = document.createTextNode(totalIndex);
+    newCell.appendChild(newText);
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(stateArray[totalIndex]);
+    newCell.appendChild(newText);
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(caseArray[totalIndex][caseArray[totalIndex].length-1]);
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(deathArray[totalIndex][deathArray[totalIndex].length-1]);
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(diffArray[totalIndex][diffArray[totalIndex].length-1]);
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(deathDiffArray[totalIndex][deathDiffArray[totalIndex].length-1]);
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(roll7DiffArray[totalIndex][roll7DiffArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(roll7DeathDiffArray[totalIndex][roll7DeathDiffArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+
     onRowClick("state-table", function (row){
       var value = row.getElementsByTagName("td")[0].innerHTML;
       //document.getElementById('click-response').innerHTML = value + " clicked!";
@@ -226,7 +297,7 @@ function refresh(refreshData) {
         deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
     };
 
-    value = 1;
+    value = totalIndex;
     show_state_graph(value, stateArray[value], dayArray[value],
       caseArray[value], deathArray[value], diffArray[value],
       deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
