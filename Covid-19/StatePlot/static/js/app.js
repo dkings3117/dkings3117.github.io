@@ -18,7 +18,7 @@ function refresh(refreshData) {
 
     console.log(refreshData);
     console.log(refreshData.columns);
-    data_length = refreshData.length;
+    var data_length = refreshData.length;
     var dayArray = new Array;
     var caseArray = new Array;
     var deathArray = new Array;
@@ -31,13 +31,9 @@ function refresh(refreshData) {
     var roll7DeathDiffArray = new Array;
     var maxFips = 0;
     var totalIndex = 0;
-    stateArray = [];
-    fipsArray = [];
-    /* for (i = 0; i < stateArray.length; i++)
-    {
-      stateArray[i] = "";
-    } */
-  
+    var stateArray = [];
+    var fipsArray = [];
+    var populationArray = [];
     
     console.log("dayArray:");
     console.log(dayArray);
@@ -66,6 +62,7 @@ function refresh(refreshData) {
       roll7DeathArray[i] = new Array();
       roll7DiffArray[i] = new Array();
       roll7DeathDiffArray[i] = new Array();
+      populationArray[i] = 0;
     }
 
     for (i = 0; i < refreshData.length; i++)
@@ -98,6 +95,64 @@ function refresh(refreshData) {
       pctArray[fips].push(0);
     }
 
+    var dataset = [];
+    d3.csv("https://cors-anywhere.herokuapp.com/https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/state/detail/SCPRC-EST2019-18+POP-RES.csv",
+    function(popdata) {
+      console.log("Population CSV");
+
+      popdata.forEach(function(d) { dataset.push([ +d.STATE, d.NAME, +d.POPESTIMATE2019 ]) });
+      console.log("dataset");
+      console.log(dataset);
+
+      pop_function(dataset);
+    });
+
+    function pop_function (pdata) {
+      console.log("Population CSV");
+      console.log("pdata");
+      for (i = 0; i < pdata.length; i++)
+      {
+        console.log(i + " " + pdata[i]);
+      }
+
+    console.log("join");
+    var popArray = new Array(stateArray.length);
+    var lookupIndex = new Array(stateArray.length);
+    var output = [];
+    console.log("dataset");
+    console.log(dataset);
+    console.log(dataset.length);
+    for (var i = 0; i < stateArray.length; i++) {
+      popArray[i] = "";
+      lookupIndex[i] = 0;
+    }
+    for (var i = 0; i < dataset.length; i++) {
+          var row = dataset[i];
+          console.log(i, row);
+          lookupIndex[row[0]] = row; // create an index for lookup table
+    }
+    console.log("lookupIndex");
+    console.log(lookupIndex);
+    console.log("stateArray");
+    console.log(stateArray);
+    for (var j = 0; j < stateArray.length; j++) {
+          var y = stateArray[j];
+          console.log(y);
+          console.log(j);
+          var x = lookupIndex[j]; // get corresponding row from lookupTable
+          console.log(x);
+          if (j == 0 || y != "" && x != 0)
+          {
+            popArray[j] = x[2];
+          }
+    }
+    /* hard code values for territories that are not in the CSV data */
+    popArray[66] = 168485; // Guam
+    popArray[69] = 51433; // Northern Mariana Islands
+    popArray[78] = 106235; // US Vigin Islands
+    console.log("popArray");
+    console.log(popArray);
+
     console.log("dayArray:");
     console.log(dayArray);
     console.log("caseArray:");
@@ -108,6 +163,8 @@ function refresh(refreshData) {
     console.log(diffArray);
     console.log("deathDiffArray");
     console.log(deathDiffArray);
+    console.log("populationArray");
+    console.log(populationArray);
     for (i = 0; i < arrSize; i++)
     {
       diffArray[i].push(0);
@@ -172,6 +229,52 @@ function refresh(refreshData) {
     console.log("roll7DeathDiffArray");
     console.log(roll7DeathDiffArray);
 
+    casesPerCapitaArray = new Array(arrSize);
+    deathsPerCapitaArray = new Array(arrSize);
+    newCasesPerCapitaArray = new Array(arrSize);
+    newDeathsPerCapitaArray = new Array(arrSize);
+    roll7CasesPerCapitaArray = new Array(arrSize);
+    roll7DeathsPerCapitaArray = new Array(arrSize);
+    for (i = 0; i < arrSize; i++)
+    {
+      casesPerCapitaArray[i] = new Array(caseArray[i].length);
+      deathsPerCapitaArray[i] = new Array(deathArray[i].length);
+      newCasesPerCapitaArray[i] = new Array(diffArray[i].length);
+      newDeathsPerCapitaArray[i] = new Array(deathDiffArray[i].length);
+      roll7CasesPerCapitaArray[i] = new Array(roll7DiffArray[i].length);
+      roll7DeathsPerCapitaArray[i] = new Array(roll7DeathDiffArray[i].length);
+
+      if (popArray[i] != "")
+      {
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          casesPerCapitaArray[i][j] = 100000 * caseArray[i][j] / popArray[i];
+        }
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          deathsPerCapitaArray[i][j] = 100000 * deathArray[i][j] / popArray[i];
+        }
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          newCasesPerCapitaArray[i][j] = 100000 * diffArray[i][j]/ popArray[i];
+        }
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          newDeathsPerCapitaArray[i][j] = 100000 * deathDiffArray[i][j] / popArray[i];
+        }
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          roll7CasesPerCapitaArray[i][j] = 100000 * roll7DiffArray[i][j] / popArray[i];
+        }
+        for (j = 0; j < caseArray[i].length; j++)
+        {
+          roll7DeathsPerCapitaArray[i][j] = 100000 * roll7DeathDiffArray[i][j] / popArray[i];
+        }
+      }
+    }
+    console.log("casesPerCapitaArray");
+    console.log(casesPerCapitaArray);
+
     clearTable();
     console.log("caseArray:");
     console.log(caseArray);  
@@ -202,8 +305,14 @@ function refresh(refreshData) {
         var newText  = document.createTextNode(i);
         newCell.appendChild(newText);
         var newCell  = newRow.insertCell();
-        var newText  = document.createTextNode(stateArray[i]);
+        var newText = document.createTextNode(stateArray[i]);
         newCell.appendChild(newText);
+
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(popArray[i]);
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+
         var newCell  = newRow.insertCell();
         var newText  = document.createTextNode(caseArray[i][caseArray[i].length-1]);
         newCell.appendChild(newText);
@@ -228,9 +337,32 @@ function refresh(refreshData) {
         var newText  = document.createTextNode(parseFloat(roll7DeathDiffArray[i][roll7DeathDiffArray[i].length-1]).toFixed(2));
         newCell.appendChild(newText);
         newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(casesPerCapitaArray[i][casesPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(deathsPerCapitaArray[i][deathsPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(newCasesPerCapitaArray[i][newCasesPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(newDeathsPerCapitaArray[i][newDeathsPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(roll7CasesPerCapitaArray[i][roll7CasesPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
+        var newCell  = newRow.insertCell();
+        var newText  = document.createTextNode(parseFloat(roll7DeathsPerCapitaArray[i][roll7DeathsPerCapitaArray[i].length-1]).toFixed(2));
+        newCell.appendChild(newText);
+        newCell.style.textAlign = "right";
       }
     }
-
     var tableRef = document.getElementById('state-table').getElementsByTagName('tbody')[0];
     // Insert a row in the table at row index 0
     var newRow   = tableRef.insertRow(tableRef.rows.length);
@@ -242,6 +374,10 @@ function refresh(refreshData) {
     var newCell  = newRow.insertCell();
     var newText  = document.createTextNode(stateArray[totalIndex]);
     newCell.appendChild(newText);
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(popArray[totalIndex]);
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
     var newCell  = newRow.insertCell();
     var newText  = document.createTextNode(caseArray[totalIndex][caseArray[totalIndex].length-1]);
     newCell.appendChild(newText);
@@ -266,14 +402,41 @@ function refresh(refreshData) {
     var newText  = document.createTextNode(parseFloat(roll7DeathDiffArray[totalIndex][roll7DeathDiffArray[totalIndex].length-1]).toFixed(2));
     newCell.appendChild(newText);
     newCell.style.textAlign = "right";
-
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(casesPerCapitaArray[totalIndex][casesPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(deathsPerCapitaArray[totalIndex][deathsPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(newCasesPerCapitaArray[totalIndex][newCasesPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(newDeathsPerCapitaArray[totalIndex][newDeathsPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(roll7CasesPerCapitaArray[totalIndex][roll7CasesPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    var newCell  = newRow.insertCell();
+    var newText  = document.createTextNode(parseFloat(roll7DeathsPerCapitaArray[totalIndex][roll7DeathsPerCapitaArray[totalIndex].length-1]).toFixed(2));
+    newCell.appendChild(newText);
+    newCell.style.textAlign = "right";
+    [roll7DeathDiffArray[totalIndex].length-1]
     onRowClick("state-table", function (row){
       var value = row.getElementsByTagName("td")[0].innerHTML;
       //document.getElementById('click-response').innerHTML = value + " clicked!";
       console.log("value>", value);
       show_state_graph(value, stateArray[value], dayArray[value],
         caseArray[value], deathArray[value], diffArray[value],
-        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
+        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value],
+        casesPerCapitaArray[value], deathsPerCapitaArray[value], newCasesPerCapitaArray[value],
+        newDeathsPerCapitaArray[value], roll7CasesPerCapitaArray[value], roll7DeathsPerCapitaArray[value]
+        );
     });
     onChange("stateSelector", function (){
       //var value = row.getElementById("stateSelector")[0].innerHTML;
@@ -284,7 +447,10 @@ function refresh(refreshData) {
       console.log("value>", value);
       show_state_graph(value, stateArray[value], dayArray[value],
         caseArray[value], deathArray[value], diffArray[value],
-        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
+        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value],
+        casesPerCapitaArray[value], deathsPerCapitaArray[value], newCasesPerCapitaArray[value],
+        newDeathsPerCapitaArray[value], roll7CasesPerCapitaArray[value], roll7DeathsPerCapitaArray[value]
+        );
     });
 
     // functions assigned to onchange properties
@@ -294,13 +460,20 @@ function refresh(refreshData) {
       console.log("value>", value);
       show_state_graph(value, stateArray[value], dayArray[value],
         caseArray[value], deathArray[value], diffArray[value],
-        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
+        deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value],
+        casesPerCapitaArray[value], deathsPerCapitaArray[value], newCasesPerCapitaArray[value],
+        newDeathsPerCapitaArray[value], roll7CasesPerCapitaArray[value], roll7DeathsPerCapitaArray[value]  
+        );
     };
 
     value = totalIndex;
     show_state_graph(value, stateArray[value], dayArray[value],
       caseArray[value], deathArray[value], diffArray[value],
-      deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value]);
+      deathDiffArray[value], roll7DiffArray[value], roll7DeathDiffArray[value],
+      casesPerCapitaArray[value], deathsPerCapitaArray[value], newCasesPerCapitaArray[value],
+      newDeathsPerCapitaArray[value], roll7CasesPerCapitaArray[value], roll7DeathsPerCapitaArray[value]
+      );
+    }
 
   };
 
@@ -333,21 +506,24 @@ function onChange(selectId, callback) {
   console.log(select);
 }
 
-function show_state_graph(fips, stateName, dayArray, caseArray, deathArray, diffArray, deathDiffArray, roll7DiffArray, roll7DeathDiffArray) {
+function show_state_graph(fips, stateName, dayArray, caseArray, deathArray, diffArray, deathDiffArray, roll7DiffArray, roll7DeathDiffArray,
+  casesPerCapitaArray, deathsPerCapitaArray, newCasesPerCapitaArray, newDeathsPerCapitaArray, roll7CasesPerCapitaArray, roll7DeathsPerCapitaArray) {
     // Set x and y arrays
-    var barx = [dayArray, dayArray, dayArray, dayArray, dayArray, dayArray];
-    var bary = [caseArray, deathArray, diffArray, deathDiffArray, roll7DiffArray, roll7DeathDiffArray];
+    var barx = [dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray, dayArray];
+    var bary = [caseArray, deathArray, diffArray, deathDiffArray, roll7DiffArray, roll7DeathDiffArray,
+                casesPerCapitaArray, deathsPerCapitaArray, newCasesPerCapitaArray, newDeathsPerCapitaArray,
+                roll7CasesPerCapitaArray, roll7DeathsPerCapitaArray];
     
     function makeTrace(i) {
       return {
         x: barx[i],
         y: bary[i],
-        type: i==2||i==3?'bar':'line',
-        name: i==2||i==3?'Daily':i==4||i==5?'Rolling 7 day avg':'',
+        type: i==2||i==3||i==8||i==9?'bar':'line',
+        name: i==2||i==3||i==8||i==9?'Daily':i==4||i==5||i==10||i==11?'Rolling 7 day avg':'', // legend labels
         marker: {
-          color: i==2||i==3?'rgb(255,151,76)':'rgb(57,106,177)',
+          color: i==2||i==3||i==8||i==9?'rgb(255,151,76)':'rgb(57,106,177)', // bar graph color : line graph color
           line: {
-            color: i==2||i==3?'rgb(255,151,76)':'rgb(57,106,177)',
+            color: i==2||i==3||i==8||i==9?'rgb(255,151,76)':'rgb(57,106,177)',
             width: 1
           }
         },
@@ -358,30 +534,53 @@ function show_state_graph(fips, stateName, dayArray, caseArray, deathArray, diff
     var updatemenus = [{
       y: 1,
       yanchor: 'top',
-      buttons: [{
-      method: 'restyle',
-      args: ['visible', [true, false, false, false, false, false]],
-      label: 'Total confirmed cases by day'
+      buttons: [
+      {
+        method: 'restyle',
+        args: ['visible', [true, false, false, false, false, false, false, false, false, false, false, false]],
+        label: 'Total confirmed cases'
       },
       {
         method: 'restyle',
-        args: ['visible', [false, true, false, false, false, false]],
-        label: 'Total deaths by day'
+        args: ['visible', [false, true, false, false, false, false, false, false, false, false, false, false]],
+        label: 'Total deaths'
       },
       {
         method: 'restyle',
-        args: ['visible', [false, false, true, false, true, false]],
-        label: 'New cases by day'
+        args: ['visible', [false, false, true, false, true, false, false, false, false, false, false, false]],
+        label: 'New cases'
       },
       {
         method: 'restyle',
-        args: ['visible', [false, false, false, true, false, true]],
-        label: 'New deaths by day'
+        args: ['visible', [false, false, false, true, false, true, false, false, false, false, false, false]],
+        label: 'New deaths'
+      },
+      {
+        method: 'restyle',
+        args: ['visible', [false, false, false, false, false, false, true, false, false, false, false, false]],
+        label: 'Total cases per 100,000'
+      },
+      {
+        method: 'restyle',
+        args: ['visible', [false, false, false, false, false, false, false, true, false, false, false, false]],
+        label: 'Total deaths per 100,000'
+      },
+      {
+        method: 'restyle',
+        args: ['visible', [false, false, false, false, false, false, false, false, true, false, true, false]],
+        label: 'New cases per 100,000'
+      },
+      {
+        method: 'restyle',
+        args: ['visible', [false, false, false, false, false, false, false, false, false, true, false, true]],
+        label: 'New deaths per 100,000'
       }
+
       ]
     }]
 
-    var data = [0,1,2,3,4,5].map(makeTrace)
+    // map trace for each array element in barx and bary
+    var data = [0,1,2,3,4,5,6,7,8,9,10,11].map(makeTrace)
 
     var layout = {
       updatemenus: updatemenus,
